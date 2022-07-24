@@ -50,9 +50,9 @@ class classProducts
     }
 
     //query para insertan a base de datos 
-    public function insert($nombre, $descripcion, $cantidad, $tipo, $valor, $USUARIOS_ID)
+    public function insert($nombre, $descripcion, $cantidad, $tipo, $valor, $USUARIOS_id)
     {   //ojo
-        $query_insert = 'INSERT INTO ' . $this->db_table . ' (nombre, descripcion, cantidad, tipo, valor, USUARIOS_ID) 
+        $query_insert = 'INSERT INTO ' . $this->db_table . ' (nombre, descripcion, cantidad, tipo, valor, USUARIOS_id) 
         VALUES (:nombre, :descripcion, :cantidad, :tipo, :valor, :USUARIOS_ID)';
         $stmt_insert = $this->conn->prepare($query_insert);
 
@@ -62,7 +62,7 @@ class classProducts
         $cantidad = htmlspecialchars(strip_tags($cantidad));
         $tipo = htmlspecialchars(strip_tags($tipo));
         $valor = htmlspecialchars(strip_tags($valor));
-        $USUARIOS_ID = htmlspecialchars(strip_tags($USUARIOS_ID));
+        $USUARIOS_id = htmlspecialchars(strip_tags($USUARIOS_id));
         
         //Vincular el parametro que viene del input 
         $stmt_insert->bindParam(':nombre', $nombre, PDO::PARAM_STR);
@@ -70,7 +70,7 @@ class classProducts
         $stmt_insert->bindParam(':cantidad', $cantidad, PDO::PARAM_STR);
         $stmt_insert->bindParam(':tipo', $tipo, PDO::PARAM_STR);
         $stmt_insert->bindParam(':valor', $valor, PDO::PARAM_STR);
-        $stmt_insert->bindParam(':USUARIOS_ID', $USUARIOS_ID, PDO::PARAM_STR);
+        $stmt_insert->bindParam(':USUARIOS_ID', $USUARIOS_id, PDO::PARAM_STR);
 
         //Si se escucja la queri insertar y devolver  un true 
         if ($stmt_insert->execute()) {

@@ -1,33 +1,25 @@
 <?php include_once('../../config/connection_db.php')?>
-<?php include_once('../../models/products.php')?>
+<?php include_once('../../models/shopping.php')?>
 <?php
 
 $classDataBase = new classConnection_mysql;
 $db = $classDataBase->connection(); 
 
-$classProductos = new classProducts($db);
+$classShopping = new classShopping($db);
 
-//insertar producto 
+$id = $_GET['id'];
+$obj_compra = $classShopping->search_one($id);
+print_r($obj_compra);
 
-if (isset($_POST['crearArticulo']))    
-{   
-    //declacion de variables
-    $nombre = $_POST['nombre'];
-    $descripcion = $_POST['descripcion'];
-    $cantidad = $_POST['cantidad'];
-    $tipo = $_POST['tipo'];
-    $valor = $_POST['valor'];
-    $USUARIOS_id = 2;
-
-    if ($classProductos->insert($nombre, $descripcion, $cantidad, $tipo, $valor, $USUARIOS_id)) 
+if (isset($_POST['borrarCompra']))    
+{      
+    if ($classShopping->delete($id)) 
     {   
-        $mensaje = "Producto <b><i>" . $nombre . "</i></b> agregado exitosamente!!";
-        header('Location: ../../producto.php?mensaje=' .urldecode($mensaje));
+        $error = "Compra realizada por <b><i>" . $nombre . "</i></b> eliminada exitosamente!!";
+        header('Location: ../../producto.php?error='.urldecode($error));
     }else {
-        $error = "no se pudo crear el producto";
+        $error = "no se pudo eliminar la compra";
     }
-
-
 }
 
 ?>
@@ -89,35 +81,42 @@ if (isset($_POST['crearArticulo']))
     <div class="row">
         <div class="col-sm-6 offset-3">
         <br />
-        <h3>Agregar un Producto</h3>
+        <h3>Eliminar Compra</h3>
             
        
-        <form method="POST" action="">
-        
-            <div class="mb-3">
-                <label for="nombre" class="form-label">Nombre:</label>
-                <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Ingrese el nombre">               
-            </div>
-            <div class="mb-3">
-                <label for="descripcion" class="form-label">Descripción:</label>
-                <input type="text" class="form-control" name="descripcion" id="descripcion" placeholder="Ingrese el nombre">               
-            </div>
-            <div class="mb-3">
-                <label for="cantidad" class="form-label">Cantidad:</label>
-                <input type="text" class="form-control" name="cantidad" id="cantidad" placeholder="Ingrese el nombre">               
-            </div>
-            <div class="mb-3">
-                <label for="tipo" class="form-label">Tipo:</label>
-                <input type="text" class="form-control" name="tipo" id="tipo" placeholder="Ingrese el nombre">               
-            </div>
-            <div class="mb-3">
-                <label for="valor" class="form-label">Valor:</label>
-                <input type="text" class="form-control" name="valor" id="valor" placeholder="Ingrese el nombre">               
-            </div>
+        <form method="POST">
+                <div class="mb-3">
+                    <label for="nombre" class="form-label">Nombre del cliente</label>
+                    <input type="text" class="form-control" id="nombre" name = "nombre" placeholder="ingrese el nombre" value="<?php echo $obj_compra->nombre?>" readonly>
+                </div>
 
-            <br />
-            <button type="submit" name="crearArticulo" class="btn btn-primary w-20"><i class="bi bi-person-bounding-box"></i> Crear Nuevo Artículo</button>
-            <a  href="../../producto.php" class="btn btn-danger"><i class="bi bi-person-bounding-box"></i>Cancelar</a>
+                <div class="mb-3">
+                    <label for="producto" class="form-label">Producto comprado</label>
+                    <input type="text" class="form-control" id="producto" name = "producto" placeholder="ingrese el nombre del producto" value="<?php echo $obj_compra->producto?>" readonly>
+                </div>
+
+
+                <div class="mb-3">
+                    <label for="tipo" class="form-label">Tipo de producto</label>
+                    <input class="form-select" id="tipo" name = "tipo_producto" aria-label="Default select example" value="<?php echo $obj_compra->tipo_producto?>" readonly>
+                       
+                </div>
+
+                <div class="mb-3">
+                    <label for="codigo" class="form-label">Codigo de compra</label>
+                    <input type="number" name = "codigo_compra" class="form-control" id="codigo" placeholder="ingrese el cod. de compra" value="<?php echo $obj_compra->codigo_compra?>" readonly>
+                </div>
+
+                <div class="mb-3">
+                    <label for="valor" class="form-label">Valor de la compra</label>
+                    <input type="text" class="form-control" id="valor" name = "total" placeholder="ingrese el valor de la factura" value="<?php echo $obj_compra->total?>" readonly>
+                </div>
+
+                <div class="mb-3">
+                    <button type="submit" name="borrarCompra" class="btn btn-danger"><i class="bi bi-person-bounding-box"></i>Borrar Compra</button>
+                    <a  href="../../compras.php" class="btn btn-success"><i class="bi bi-person-bounding-box"></i>Cancelar</a>
+                </div>
+            
         </form>
         </div>
     </div>

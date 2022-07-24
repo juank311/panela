@@ -19,9 +19,9 @@ if (isset($_POST['editarProducto']))
     $cantidad = $_POST['cantidad'];
     $tipo = $_POST['tipo'];
     $valor = $_POST['valor'];
-    $USUARIOS_ID = 2;
+   
     
-    if ($classProductos->insert($nombre, $descripcion, $cantidad, $tipo, $valor, $USUARIOS_ID)) 
+    if ($classProductos->update($id, $nombre, $descripcion, $cantidad, $tipo, $valor)) 
     {   
         $mensaje = "Producto <b><i>" . $nombre . "</i></b> editado exitosamente!!";
         header('Location: ../../producto.php?mensaje=' .urldecode($mensaje));

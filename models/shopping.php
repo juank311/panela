@@ -71,38 +71,7 @@ class classShopping
         }
     }
 
-    //METODO ACTUALIZAR 
-    public function update($id, $nombre, $descripcion, $cantidad, $tipo, $valor)
-    {   
-        $query_update = 'UPDATE ' . $this->db_table . ' SET nombre = :nombre, descripcion = :descripcion, cantidad = :cantidad, tipo = :tipo, valor = :valor WHERE id = :id';
-        $stmt_update = $this->conn->prepare($query_update);
-
-         //validacion de input con dato
-         $nombre = htmlspecialchars(strip_tags($nombre));
-         $descripcion = htmlspecialchars(strip_tags($descripcion));
-         $cantidad = htmlspecialchars(strip_tags($cantidad));
-         $tipo = htmlspecialchars(strip_tags($tipo));
-         $valor = htmlspecialchars(strip_tags($valor));
-         
-         
-         //Vincular el parametro que viene del input 
-         $stmt_update->bindParam(':id', $id);
-         $stmt_update->bindParam(':nombre', $nombre, PDO::PARAM_STR);
-         $stmt_update->bindParam(':descripcion', $descripcion, PDO::PARAM_STR);
-         $stmt_update->bindParam(':cantidad', $cantidad, PDO::PARAM_STR);
-         $stmt_update->bindParam(':tipo', $tipo, PDO::PARAM_STR);
-         $stmt_update->bindParam(':valor', $valor, PDO::PARAM_STR);
-         
- 
-         //Si se escucja la queri insertar y devolver  un true 
-         if ($stmt_update->execute()) {
-             return true;
-         } else {
-             
-             return false;
-         }
-    }
-
+    
     //METODO DELETE BORRAR 
     public function delete($id)
     {   //ojo
