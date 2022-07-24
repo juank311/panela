@@ -8,7 +8,7 @@ $db = $classDataBase->connection();
 $classShopping = new classShopping($db);
 
 $obj_customer = $classShopping->search();
-print_r($obj_customer);
+//print_r($obj_customer);
   
 ?>
 <!DOCTYPE html>

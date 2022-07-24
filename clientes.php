@@ -1,4 +1,6 @@
-<?php include_once('config/connection_db.php')?>
+<?php
+
+include_once('config/connection_db.php');?>
 <?php include_once('models/customers.php')?>
 <?php
 

@@ -1,4 +1,4 @@
-<?php include_once('config/connection_db.php')?>
+
 <!DOCTYPE html>
 <html lang="en">
 

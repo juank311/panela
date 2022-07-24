@@ -8,9 +8,7 @@ $db = $classDataBase->connection();
 $classProductos = new classProducts($db);
 
 $obj_products = $classProductos->search();
-print_r($obj_products);
-
-
+//print_r($obj_products);
 
 ?>
 <!DOCTYPE html>

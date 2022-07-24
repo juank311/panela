@@ -1,4 +1,61 @@
 <?php include_once('config/connection_db.php')?>
+
+<?php
+
+$classDataBase = new classConnection_mysql;
+$db = $classDataBase->connection(); 
+
+//se actva el validador de la sesion
+session_start();
+
+//se verifica si la sesion esta activa por medio de empty, entonces:
+
+if (!empty($_SESSION['activo'])) {
+    header('Location:panel.php');
+}
+//condicionar presion del boton registrar 
+if (isset($_POST['log_in'])) 
+{
+  $email = $_POST['email'];
+  $pass =  md5($_POST['password']);
+  
+    //verificar si hay datos seteados en los input de entrada de login
+    if (!empty($_POST['email']) && $_POST['email'] != "" && !empty($_POST['password']) && $_POST['password'] != "") 
+    {
+        //ejecucion de la consulta 
+        $query_search_email = "SELECT * FROM usuarios WHERE usuario = :email";
+        $stmt_search_email = $db->prepare($query_search_email);
+        $stmt_search_email->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt_search_email->execute();
+        $email_verification = $stmt_search_email->fetch(PDO::FETCH_OBJ);
+        // print_r($email_verification);
+        //print_r( $email_verification->password);
+            if ($email_verification) 
+            {
+                if ($pass == $email_verification->contrasena)
+                {
+                    $_SESSION['activo']= true;
+                    $_SESSION['data_employee']=$email_verification;
+                    header('Location:home.php');
+                } else{
+                $error = "La Contraseña es incorrecta";
+                }
+            } else {
+            $error = "El correo es invalido";
+            }
+    } else {
+        $error = "Existen campos vacios"; }
+    
+}else {
+        if (!isset($_POST['acceder'])) {
+            $mensaje = "Por favor ingrese usuario y contraseña";
+        }else {
+            $error = "Existen campos vacios por aca ";
+        }
+    } 
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,23 +82,44 @@
         <div id="login-row" class="row justify-content-center align-items-center">
             <div id="login-column" class="col-md-6">
                 <div id="login-box" class="col-md-12">
-                    <form id="login-form" class="form" action="" method="post">
+                     <?php if (isset($mensaje)) : ?>
+                    <!-- mensaje --> 
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong><?php echo $mensaje;?></strong> 
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php endif ?>
+                    <!-- error --> 
+                    <?php if (isset($error)) : ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong><?php echo $error; ?></strong> 
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php endif ?>
+                    <!-- end error -->
+                    <form id="login-form" class="form" action="" method="POST">
                         <h3 class="text-center text-info">Acceso</h3>
-                        <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                            <label for="floatingInput">Email address</label>
+                        <div class="input-group mb-3">
+                            <input type="email" class="form-control" name="email" placeholder="Ingresa el email">
+                            <div class="input-group-append">
+                            
+                            </div>
+                            </div>
+                            <div class="input-group mb-3">
+                            <input type="password" class="form-control" type="password" name="password" placeholder="Ingresa el password">
+                            <div class="input-group-append">
+                                
+                            </div>
+                            </div>
+                            <div class="row">
+                            
+                            <!-- /.col -->
+                            <div class="col-sm-12">
+                            <button type="submit" name="log_in" class="btn btn-primary d-block w-100"><i class="fas fa-user"></i> Ingresar</button>
                         </div>
-                        <div class="form-floating">
-                            <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-                            <label for="floatingPassword">Password</label>
-                        </div>
-                        <br>
-                        <div class="form-group">
-                            <button type="button" class="btn btn-primary">Acceder</button>
-                        </div>
-                        <br>
-                        <div id="register-link" class="text-right">
-                            <a href="#" style="text-decoration: none;" class="text-info">Registrar</a>
+                            <!-- /.col -->
+                            </div>
+                            <a href="" style="text-decoration: none;" class="text-info">Registrar</a>
                         </div>
                     </form>
                 </div>

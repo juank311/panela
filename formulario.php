@@ -1,4 +1,34 @@
 <?php include_once('config/connection_db.php')?>
+<?php include_once('models/formulary.php')?>
+
+<?php
+
+$classDataBase = new classConnection_mysql;
+$db = $classDataBase->connection(); 
+
+$classFormulary = new classFormulary($db);
+
+//insertar producto 
+
+if (isset($_POST['enviar']))    
+{   
+    //declacion de variables
+    $nombre = $_POST['nombre'];
+    $email = $_POST['email'];
+    $telefono = $_POST['telefono'];
+    $mensaje = $_POST['mensaje'];
+    echo $nombre;
+    
+    if ($classFormulary->insert($nombre, $email, $telefono, $mensaje)) 
+    {   
+        $mensaje = "Mensaje enviado por <b><i>" . $nombre . "</i></b> creado con exitosamente!!";
+        header('Location: formulario.php?mensaje=' .urldecode($mensaje));
+    }else {
+        $error = "no se pudo crear la compra";
+    }
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -26,26 +56,43 @@
             <div class="row">
                 <h2 class="text-center">Formulario de contacto - DISTRIBUIDORA PANELA</h1>
                     <div class="container p-3 mt-3">
+                    <?php if (isset($_GET['mensaje'])) : ?>
+                    <!-- mensaje --> 
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong><?php echo $_GET['mensaje'];?></strong> 
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php endif ?>
+                    <!-- error --> 
+                    <?php if (isset($_GET['error'])) : ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong><?php echo $_GET['error']; ?></strong> 
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php endif ?>
+                    <!-- end error -->
                         <section id="seccionformulario" class="bg-ligth p-2 border border-dark">
                             <h2 class="text-center">GESTION DE CONTACTO</h2>
-                            <form action="#">
-                                <label for="nombre" class="form-label">Nombre</label>
-                                <input id="nombre" class="form-control" type="text">
-
-                                <label for="correo" class="form-label">Correo electronico</label>
-                                <input id="correo" class="form-control" type="mail">
-
-                                <label for="telefono" class="form-label">Telefono</label>
-                                <input id="telefono" class="form-control" type="number">
-
-                                <div class="mb-3">
-                                    <label for="mensaje" class="form-label">Mensaje</label>
-                                    <textarea class="form-control" id="mensaje" rows="3"></textarea>
-                                </div>
-
-                                <div class="mb-3">
-                                    <input type="button" class="btn btn-primary" id="btnGuardar" value="Enviar">
-                                </div>
+                            <form method="POST">
+                            <div class="mb-3">
+                                <label for="nombre" class="form-label">Nombre:</label>
+                                <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Ingrese el nombre">               
+                            </div>
+                            <div class="mb-3">
+                                <label for="descripcion" class="form-label">Email:</label>
+                                <input type="email" class="form-control" name="email" id="descripcion" placeholder="Ingrese el email">               
+                            </div>
+                            <div class="mb-3">
+                                <label for="cantidad" class="form-label">Telefono:</label>
+                                <input type="text" class="form-control" name="telefono" id="cantidad" placeholder="Ingrese el telefono">               
+                            </div>
+                            <div class="mb-3">
+                                <label for="tipo" class="form-label">Mensaje:</label>
+                                <textarea type="text" class="form-control" name="mensaje" id="tipo" placeholder="Ingrese el mensaje" rows="3"></textarea>            
+                            </div>
+                            
+                                <button type="submit" name="enviar" class="btn btn-primary w-20"><i class="bi bi-person-bounding-box"></i> Enviar</button>
+                                <a  href="home.php" class="btn btn-danger"><i class="bi bi-person-bounding-box"></i>Cancelar</a>
                             </form>
                         </section>
                     </div>

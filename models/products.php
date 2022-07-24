@@ -9,7 +9,7 @@ class classProducts
     //Conexion a la db
     private $conn;
     //nombre de la tabla 
-    private $db_table = "products";
+    private $db_table = "productos";
 
     //propiedades que deben ser publicas: las variables que contiene la tabla 
     public $id;
